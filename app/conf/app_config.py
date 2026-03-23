@@ -84,4 +84,4 @@ structured = OmegaConf.structured(AppConfig)
 app_config: AppConfig = OmegaConf.to_object(OmegaConf.merge(structured, context))
 
 # if __name__ == '__main__':
-#     print(app_config.qdrant)
+#     print(app_config.db_dw)
