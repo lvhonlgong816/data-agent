@@ -1,6 +1,7 @@
 from dataclasses import asdict
 
 from qdrant_client import AsyncQdrantClient, models
+from qdrant_client.conversions.common_types import QueryResponse
 from qdrant_client.http.models import PointStruct
 
 from app.conf.app_config import app_config
@@ -23,13 +24,23 @@ class MetricQdrantRepository:
                 )
             )
 
-    async def upsert(self, ids:list[str], embeddings:list[list[float]], payloads:list[MetricInfo],batch_size:int = 10):
+    async def upsert(self, ids: list[str], embeddings: list[list[float]], payloads: list[MetricInfo],
+                     batch_size: int = 10):
         zipped = list(zip(ids, embeddings, payloads))
         for i in range(0, len(zipped), batch_size):
             batch = zipped[i:i + batch_size]
             points = [PointStruct(
-                id = id,
+                id=id,
                 vector=embedding,
                 payload=asdict(payload)
-            ) for id,embedding,payload in batch]
+            ) for id, embedding, payload in batch]
             await self.client.upsert(collection_name=self.collection_name, points=points)
+
+    async def search(self, embedding: list[float], score: float = 0.7, limit: int = 10) ->list[MetricInfo]:
+        result: QueryResponse = await self.client.query_points(
+            collection_name=self.collection_name,
+            query=embedding,
+            score_threshold=score,
+            limit=limit
+        )
+        return [MetricInfo(**point.payload) for point in result.points]
