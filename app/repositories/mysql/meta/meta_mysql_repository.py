@@ -16,7 +16,7 @@ from app.repositories.mysql.meta.mappers.table_info_mapper import TableInfoMappe
 class MetaMySQLRepository:
     """用于操作meta数据库"""
 
-    def __init__(self, session: AsyncSession):
+    def __init__(self, session: AsyncSession|None):
         self.session = session
 
     async def save_table_infos(self, table_infos: list[TableInfo]):

@@ -7,7 +7,8 @@ llm = ChatOpenAI(
     model="deepseek-chat",
     temperature=0,
     api_key="sk-6b75e53f512c46eb9a9087dfc892defa",
-    base_url="https://api.deepseek.com"
+    base_url="https://api.deepseek.com",
+    timeout=1000
 )
 
 # llm = init_chat_model(

@@ -100,7 +100,7 @@ async def merge_retrieved_info(state: DataAgentState, runtime: Runtime[DataAgent
             alias=retrieved_metric.alias
         ) for retrieved_metric in retrieved_metrics]
 
-        writer({"type": "progress", "step": "合并信息", "status": "running"})
+        writer({"type": "progress", "step": "合并信息", "status": "success"})
         logger.info(f"合并信息，指标列表：{[metric_info["name"] for metric_info in metric_infos]}")
 
         # 6.更新state中表信息列表、指标信息列表
